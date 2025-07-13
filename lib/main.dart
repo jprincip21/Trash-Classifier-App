@@ -22,7 +22,10 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.dark,
         ),
       ),
-      home: Scaffold(appBar: AppBar(title: Text("Trash Classifier"))),
+      home: Scaffold(
+        appBar: AppBar(title: Text("Trash Classifier")),
+        body: Column(children: [Image.asset("assets/icon/icon.png")]),
+      ),
     );
   }
 }
