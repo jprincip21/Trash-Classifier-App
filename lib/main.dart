@@ -1,31 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trash_classifier_app/app/app.dart';
 
 void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
-          brightness: Brightness.dark,
-        ),
-      ),
-      home: Scaffold(
-        appBar: AppBar(title: Text("Trash Classifier")),
-        body: Column(children: [Image.asset("assets/icon/icon.png")]),
-      ),
-    );
-  }
+  runApp(const MyApp());
 }
