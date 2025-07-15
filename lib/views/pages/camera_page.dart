@@ -5,12 +5,15 @@ class CameraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.camera_alt),
-        iconSize: 250,
+    return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
+      body: Center(child: Text("Camera Page")),
     );
   }
 }

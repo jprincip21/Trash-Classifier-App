@@ -17,10 +17,6 @@ class _NavbarWidgetState extends State<NavbarWidget> {
         return NavigationBar(
           destinations: [
             NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-            NavigationDestination(
-              icon: Icon(Icons.camera_alt_outlined),
-              label: "Camera",
-            ),
             NavigationDestination(icon: Icon(Icons.list), label: "Saved Data"),
           ],
           selectedIndex: selectedPage,
