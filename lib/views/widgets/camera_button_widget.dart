@@ -6,6 +6,7 @@ class CamerabuttonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Builds the camera button when called
     return FloatingActionButton(
       onPressed: () {
         Navigator.push(

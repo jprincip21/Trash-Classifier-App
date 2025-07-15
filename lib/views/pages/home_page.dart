@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  ///Builds the HomePage when called
   const HomePage({super.key});
 
   @override

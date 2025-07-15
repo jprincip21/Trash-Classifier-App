@@ -11,6 +11,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  ///Builds the settings page when called
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

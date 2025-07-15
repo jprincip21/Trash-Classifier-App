@@ -19,6 +19,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initThemeMode() async {
+    /// Gets Darkmode information for Material App
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool? themeMode = prefs.getBool(KConstant.darkModeKey);
     darkModeNotifier.value =
@@ -27,6 +28,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    /// Holds the Material App and controls if the app is in darkmode
     return ValueListenableBuilder(
       valueListenable: darkModeNotifier,
       builder: (context, isDarkMode, child) {

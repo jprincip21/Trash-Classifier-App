@@ -11,6 +11,7 @@ class NavbarWidget extends StatefulWidget {
 class _NavbarWidgetState extends State<NavbarWidget> {
   @override
   Widget build(BuildContext context) {
+    /// Builds the Bottom Navigation bar when called
     return ValueListenableBuilder(
       valueListenable: selectedPageNotifier,
       builder: (context, selectedPage, child) {

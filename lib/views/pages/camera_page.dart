@@ -5,6 +5,7 @@ class CameraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ///Builds the Camera Page when Called
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(

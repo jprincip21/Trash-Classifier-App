@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SavedDataPage extends StatelessWidget {
+  /// Holds user saved data
   const SavedDataPage({super.key});
 
   @override
