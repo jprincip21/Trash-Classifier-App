@@ -77,12 +77,14 @@ class _CameraPageState extends State<CameraPage> {
                 children: [
                   Positioned.fill(child: CameraPreview(controller)),
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
+                      child: GestureDetector(
+                        onTap: () {
+                          //TODO: Take Picture Logic
+                        },
+                        child: Icon(
                           Icons.circle_outlined,
                           size: 100.0,
                           color: Colors.white,
