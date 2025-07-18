@@ -28,7 +28,7 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> initializeCameras() async {
     _cameras = await availableCameras();
-    controller = CameraController(_cameras.last, ResolutionPreset.low);
+    controller = CameraController(_cameras.last, ResolutionPreset.max);
     controller
         .initialize()
         .then((_) {
@@ -54,19 +54,46 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     ///Builds the Camera Page when Called
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        body: _isCameraReady
-            ? CameraPreview(controller)
-            : const Center(child: CircularProgressIndicator()),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.flash_on)),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.flip_camera_ios_outlined),
+          ),
+        ],
+        backgroundColor: Colors.transparent,
       ),
+      body: _isCameraReady
+          ? SizedBox.expand(
+              child: Stack(
+                children: [
+                  Positioned.fill(child: CameraPreview(controller)),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.circle_outlined,
+                          size: 100.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 }
