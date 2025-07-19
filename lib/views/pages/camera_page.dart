@@ -114,6 +114,7 @@ class _CameraPageState extends State<CameraPage> {
         });
   }
 
+  //test
   void _changeFlash() {
     _flashSetting = (_flashSetting + 1) % 3;
     if (_flashSetting == 0) {
