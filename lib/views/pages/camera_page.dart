@@ -114,7 +114,6 @@ class _CameraPageState extends State<CameraPage> {
         });
   }
 
-  //test
   void _changeFlash() {
     _flashSetting = (_flashSetting + 1) % 3;
     if (_flashSetting == 0) {
@@ -129,6 +128,10 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
+  Future<XFile> _takePicture() async {
+    return await _controller.takePicture();
+  }
+
   @override
   Widget build(BuildContext context) {
     ///Builds the Camera Page when Called
@@ -137,6 +140,7 @@ class _CameraPageState extends State<CameraPage> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
+            log("Camera Page Close");
             Navigator.pop(context);
           },
         ),
@@ -172,10 +176,12 @@ class _CameraPageState extends State<CameraPage> {
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           log("Capture Button Pressed");
                           //TODO: Take Picture Logic
-                          _controller.takePicture();
+                          //! Possibly create a valuenotifier under notifiers that will be accessible from the home screen.
+                          XFile picture = await _takePicture();
+                          log('Picture saved at: ${picture.path}');
                         },
                         child: Icon(
                           Icons.circle_outlined,
