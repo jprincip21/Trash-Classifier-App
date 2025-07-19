@@ -84,11 +84,11 @@ class _CameraPageState extends State<CameraPage> {
         ? CameraController(
             _frontCamera,
             ResolutionPreset.max,
-          ) //If Were on the back camera create a controller for the front camera
+          ) //If on the back camera create a controller for the front camera
         : CameraController(
             _backCamera,
             ResolutionPreset.max,
-          ); //If Were on the front camera create a controller for the back camera
+          ); //If on the front camera create a controller for the back camera
 
     _isBackCamera = !_isBackCamera;
 
@@ -136,7 +136,6 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     ///Builds the Camera Page when Called
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
@@ -177,10 +176,10 @@ class _CameraPageState extends State<CameraPage> {
                       alignment: Alignment.bottomCenter,
                       child: GestureDetector(
                         onTap: () async {
-                          log("Capture Button Pressed");
                           //TODO: Take Picture Logic
                           //! Possibly create a valuenotifier under notifiers that will be accessible from the home screen.
                           XFile picture = await _takePicture();
+                          log("Capture Button Pressed");
                           log('Picture saved at: ${picture.path}');
                         },
                         child: Icon(
