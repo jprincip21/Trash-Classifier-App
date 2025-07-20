@@ -11,6 +11,8 @@ class CameraPage extends StatefulWidget {
   State<CameraPage> createState() => _CameraPageState();
 }
 
+//TODO: Allow users to pull images from their camera roll instead of having to take a new picture
+
 class _CameraPageState extends State<CameraPage> {
   late List<CameraDescription> _cameras;
   late CameraController _controller;
