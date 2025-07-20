@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:trash_classifier_app/data/notifiers.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
@@ -39,6 +40,8 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Future<void> _initializeCameras() async {
+    // We get the list of available cameras, then back and front cameras by checking lens direction. If no camera is found for either we default to where the camera normally is.
+    // By default we use the back camera, then initialze the camera and update the isCameraReady Variable.
     _cameras = await availableCameras();
 
     _backCamera = _cameras.firstWhere(
@@ -75,6 +78,9 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void flipCamera() async {
+    // Update the isCameraReady Variable to false and dispose of the controller
+    // Then we check if the user was using the back or front camera and set the controller to the opposite camera
+    // Then update the variable
     setState(() {
       _isCameraReady = false;
     });
@@ -115,6 +121,7 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _changeFlash() {
+    // Update the flash setting variable when called and log the information
     _flashSetting = (_flashSetting + 1) % 3;
     if (_flashSetting == 0) {
       log("Flash Mode: Off");
@@ -126,10 +133,6 @@ class _CameraPageState extends State<CameraPage> {
       log("Flash Mode: Auto");
       _controller.setFlashMode(FlashMode.auto);
     }
-  }
-
-  Future<XFile> _takePicture() async {
-    return await _controller.takePicture();
   }
 
   @override
@@ -165,6 +168,8 @@ class _CameraPageState extends State<CameraPage> {
         ],
         backgroundColor: Colors.transparent,
       ),
+
+      //If the camera is ready we will display the camera preview, otherwise we will display a loading icon.
       body: _isCameraReady
           ? SizedBox.expand(
               child: Stack(
@@ -176,11 +181,12 @@ class _CameraPageState extends State<CameraPage> {
                       alignment: Alignment.bottomCenter,
                       child: GestureDetector(
                         onTap: () async {
-                          //TODO: Take Picture Logic
-                          //! Possibly create a valuenotifier under notifiers that will be accessible from the home screen.
-                          XFile picture = await _takePicture();
+                          XFile image = await _controller.takePicture();
+                          if (!mounted) return;
                           log("Capture Button Pressed");
-                          log('Picture saved at: ${picture.path}');
+                          log('Picture saved at: ${image.path}');
+                          imageCapturedNotifier.value = image;
+                          Navigator.pop(context);
                         },
                         child: Icon(
                           Icons.circle_outlined,
