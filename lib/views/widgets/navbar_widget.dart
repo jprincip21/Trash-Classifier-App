@@ -16,6 +16,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
       valueListenable: selectedPageNotifier,
       builder: (context, selectedPage, child) {
         return NavigationBar(
+          //TODO: Update icon color based on dark/light mode
           destinations: [
             NavigationDestination(icon: Icon(Icons.home), label: "Home"),
             NavigationDestination(icon: Icon(Icons.list), label: "Saved Data"),
