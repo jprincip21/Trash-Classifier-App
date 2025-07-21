@@ -20,15 +20,14 @@ class HomePage extends StatelessWidget {
       valueListenable: imageCapturedNotifier,
       builder: (context, image, child) {
         if (image == null) {
-          return Center(child: Text("Home Page"));
-        } else {
-          return Column(
-            children: [
-              Text("Image Captured!"),
-              SizedBox(height: 10),
-              Image.file(File(image.path)),
-            ],
+          return Center(
+            child: Text(
+              "No Image Found!",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           );
+        } else {
+          return Column(children: [Image.file(File(image.path))]);
         }
       },
     );
