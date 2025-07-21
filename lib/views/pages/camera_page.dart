@@ -156,7 +156,7 @@ class _CameraPageState extends State<CameraPage> {
                 _changeFlash();
               });
             },
-            icon: Icon(_flashIcons[_flashSetting], color: Colors.white),
+            icon: Icon(_flashIcons[_flashSetting]),
           ),
 
           IconButton(
@@ -165,7 +165,7 @@ class _CameraPageState extends State<CameraPage> {
               setState(() {});
               log("Camera Flip Pressed");
             },
-            icon: Icon(Icons.flip_camera_ios_outlined, color: Colors.white),
+            icon: Icon(Icons.flip_camera_ios_outlined),
           ),
         ],
         backgroundColor: Colors.transparent,
