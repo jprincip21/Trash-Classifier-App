@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
 import 'package:trash_classifier_app/views/pages/save_image_page.dart';
