@@ -4,15 +4,29 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
-import 'package:trash_classifier_app/views/pages/save_image_page.dart';
 
-class HomePage extends StatelessWidget {
+TextEditingController _nameController = TextEditingController();
+
+class HomePage extends StatefulWidget {
   ///Builds the HomePage when called
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nameController.dispose();
+  }
 
   void _deleteImage() {
     if (imageCapturedNotifier.value != null) {
       imageCapturedNotifier.value = null;
+      _nameController.text = "";
       log("Image Deleted");
     }
   }
@@ -36,77 +50,105 @@ class HomePage extends StatelessWidget {
             ),
           );
         } else {
-          return Column(
-            children: [
-              SizedBox(
-                height: 500,
-                width: double.infinity,
-                child: Image.file(File(image.path)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
-                width: double.infinity,
-                child: Card(
-                  child: ListTile(
-                    leading: Text("Type: ", style: KTextStyle.descriptionStyle),
-                    title: Text("Loading..."),
-                    trailing: SizedBox(
-                      width: 25,
-                      height: 25,
-                      child: CircularProgressIndicator(),
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 500,
+                  width: double.infinity,
+                  child: Image.file(File(image.path)),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  width: double.infinity,
+                  child: Card(
+                    child: ListTile(
+                      leading: Text(
+                        "Type: ",
+                        style: KTextStyle.descriptionStyle,
+                      ),
+                      title: Text("Loading..."),
+                      trailing: SizedBox(
+                        width: 25,
+                        height: 25,
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsetsGeometry.only(top: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Material(
-                      shape: CircleBorder(),
-                      color: Colors.red,
-                      elevation: 4,
-
-                      child: IconButton(
-                        icon: Icon(Icons.delete),
-                        color: Colors.white,
-                        onPressed: () {
-                          _deleteImage();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              duration: Duration(seconds: 3),
-                              content: Text("Image Deleted Successfully"),
-                            ),
-                          );
+                Container(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  width: double.infinity,
+                  child: Card(
+                    child: ListTile(
+                      leading: Text(
+                        "Name:",
+                        style: KTextStyle.descriptionStyle,
+                      ),
+                      title: TextField(
+                        decoration: InputDecoration(
+                          labelText: "Enter Object Name",
+                          contentPadding: EdgeInsets.all(8),
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                        ),
+                        controller: _nameController,
+                        onEditingComplete: () {
+                          setState(() {});
                         },
-                        tooltip: "Delete",
                       ),
                     ),
-                    Material(
-                      shape: CircleBorder(),
-                      color: Colors.green,
-                      elevation: 4,
-                      child: IconButton(
-                        icon: Icon(Icons.check),
-                        color: Colors.white,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return SaveImagePage();
-                              },
-                            ),
-                          );
-                        },
-                        tooltip: "Save",
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsetsGeometry.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Material(
+                        shape: CircleBorder(),
+                        color: Colors.red,
+                        elevation: 4,
+
+                        child: IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Colors.white,
+                          onPressed: () {
+                            _deleteImage();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: Duration(seconds: 3),
+                                content: Text("Image Deleted Successfully"),
+                              ),
+                            );
+                          },
+                          tooltip: "Delete",
+                        ),
+                      ),
+                      Material(
+                        shape: CircleBorder(),
+                        color: Colors.blue,
+                        elevation: 4,
+                        child: IconButton(
+                          icon: Icon(Icons.save),
+                          color: Colors.white,
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: Duration(seconds: 3),
+                                content: Text(
+                                  "Image saved as: ${_nameController.text}",
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         }
       },
