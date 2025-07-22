@@ -1,7 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
 
@@ -30,7 +32,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _saveImage() {
+  Future<void> _saveImage(XFile image) async {
+    final appDirectory = await getApplicationDocumentsDirectory();
+    log("$appDirectory");
+    final filename = "${_nameController.text}.jpg";
     log("Image Saved as: ${_nameController.text}");
   }
 
@@ -150,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                             tooltip: "Save",
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                _saveImage();
+                                _saveImage(image);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     duration: Duration(seconds: 3),
