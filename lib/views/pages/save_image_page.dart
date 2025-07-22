@@ -13,6 +13,7 @@ class SaveImagePage extends StatefulWidget {
 
 class _SaveImagePageState extends State<SaveImagePage> {
   TextEditingController nameController = TextEditingController();
+  //TODO: Create logic to save images with corresponding data
 
   @override
   void dispose() {
