@@ -30,6 +30,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _saveImage() {
+    log("Image Saved as: ${_nameController.text}");
+  }
+
   @override
   Widget build(BuildContext context) {
     // If an image has not been taken we display a default page that will direct the use to take or pick an image
@@ -146,6 +150,7 @@ class _HomePageState extends State<HomePage> {
                             tooltip: "Save",
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                _saveImage();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     duration: Duration(seconds: 3),
