@@ -26,8 +26,16 @@ class _SaveImagePageState extends State<SaveImagePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Save Image"),
-        leading: BackButton(
+        leading: IconButton(
+          icon: Icon(Icons.cancel),
+          color: Colors.red,
           onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                duration: Duration(seconds: 3),
+                content: Text("Image not saved."),
+              ),
+            );
             Navigator.pop(context);
           },
         ),
