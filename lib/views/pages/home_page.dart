@@ -1,12 +1,22 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
+import 'package:trash_classifier_app/views/pages/save_image_page.dart';
 
 class HomePage extends StatelessWidget {
   ///Builds the HomePage when called
   const HomePage({super.key});
+
+  void _deleteImage() {
+    if (imageCapturedNotifier.value != null) {
+      imageCapturedNotifier.value = null;
+      log("Image Deleted");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +25,6 @@ class HomePage extends StatelessWidget {
     // We do this by listening to a notifier which will update the state of the screen.
 
     //TODO: Update Page that displays if had not taken a picture yet.
-    //TODO: Update page that displays after user has taken a picture.
 
     return ValueListenableBuilder(
       valueListenable: imageCapturedNotifier,
@@ -35,15 +44,18 @@ class HomePage extends StatelessWidget {
                 width: double.infinity,
                 child: Image.file(File(image.path)),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: ListTile(
-                  leading: Text("Type: ", style: KTextStyle.descriptionStyle),
-                  title: Text("Loading..."),
-                  trailing: SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: CircularProgressIndicator(),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+                width: double.infinity,
+                child: Card(
+                  child: ListTile(
+                    leading: Text("Type: ", style: KTextStyle.descriptionStyle),
+                    title: Text("Loading..."),
+                    trailing: SizedBox(
+                      width: 25,
+                      height: 25,
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
                 ),
               ),
@@ -52,25 +64,43 @@ class HomePage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Ink(
-                      decoration: ShapeDecoration(
-                        shape: CircleBorder(),
-                        color: Colors.red,
-                      ),
+                    Material(
+                      shape: CircleBorder(),
+                      color: Colors.red,
+                      elevation: 4,
+
                       child: IconButton(
                         icon: Icon(Icons.delete),
-                        onPressed: () {},
+                        color: Colors.white,
+                        onPressed: () {
+                          _deleteImage();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              duration: Duration(seconds: 3),
+                              content: Text("Image Deleted Successfully"),
+                            ),
+                          );
+                        },
                         tooltip: "Delete",
                       ),
                     ),
-                    Ink(
-                      decoration: ShapeDecoration(
-                        shape: CircleBorder(),
-                        color: Colors.green,
-                      ),
+                    Material(
+                      shape: CircleBorder(),
+                      color: Colors.green,
+                      elevation: 4,
                       child: IconButton(
                         icon: Icon(Icons.check),
-                        onPressed: () {},
+                        color: Colors.white,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return SaveImagePage();
+                              },
+                            ),
+                          );
+                        },
                         tooltip: "Save",
                       ),
                     ),
