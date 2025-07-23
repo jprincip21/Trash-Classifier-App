@@ -33,10 +33,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _saveImage(XFile image) async {
-    final appDirectory = await getApplicationDocumentsDirectory();
-    log("$appDirectory");
-    final filename = "${_nameController.text}.jpg";
-    log("Image Saved as: ${_nameController.text}");
+    final appDirectory = (await getApplicationDocumentsDirectory())
+        .path; //Gets app directory path
+    log(appDirectory);
+
+    final convertedImage = File(image.path); //sets image path to variable
+
+    final String filename =
+        "${_nameController.text}.jpg"; // adds.jpg to user specified filename
+
+    await convertedImage.copy(
+      "$appDirectory/$filename",
+    ); // copys the selected image to application directory
+
+    log("Image Saved as: ${_nameController.text} to $appDirectory/$filename");
   }
 
   @override
