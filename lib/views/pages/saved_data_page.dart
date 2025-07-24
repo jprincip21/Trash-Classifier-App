@@ -13,6 +13,7 @@ class SavedDataPage extends StatefulWidget {
 
 class _SavedDataPageState extends State<SavedDataPage> {
   //TODO: change from loading singluar file to loading list of files, use show search widget with listview builder
+  List<File>? loadedFiles;
   File? loadedContent;
 
   @override
@@ -26,7 +27,7 @@ class _SavedDataPageState extends State<SavedDataPage> {
 
     final String fileName = "a.jpg";
 
-    final file = File("$appDirectory/$fileName");
+    final file = File("$appDirectory/user_saved_data/a/$fileName");
     if (await file.exists()) {
       setState(() {
         loadedContent = file;

@@ -39,14 +39,45 @@ class _HomePageState extends State<HomePage> {
 
     final convertedImage = File(image.path); //sets image path to variable
 
-    final String filename =
+    final String fileName =
         "${_nameController.text}.jpg"; // adds.jpg to user specified filename
 
+    final String filePath =
+        "$appDirectory/user_saved_data/${_nameController.text}";
+
+    if (!await Directory(filePath).exists()) {
+      await Directory(filePath).create(recursive: true);
+    }
+
     await convertedImage.copy(
-      "$appDirectory/$filename",
+      "$filePath/$fileName",
     ); // copys the selected image to application directory
 
-    log("Image Saved as: ${_nameController.text} to $appDirectory/$filename");
+    log("Image Saved as: ${_nameController.text} to $filePath/$fileName");
+  }
+
+  Future<void> listAllFoldersInAppDirectory() async {
+    final Directory appDirectory = await getApplicationDocumentsDirectory();
+    final Directory userSavedDataDir = Directory(
+      '${appDirectory.path}/user_saved_data',
+    );
+
+    // Check if the directory exists
+    if (await userSavedDataDir.exists()) {
+      final List<FileSystemEntity> entities = await userSavedDataDir
+          .list()
+          .toList();
+
+      for (final entity in entities) {
+        if (entity is File) {
+          log('📄 File: ${entity.path}');
+        } else if (entity is Directory) {
+          log('📁 Folder: ${entity.path}');
+        }
+      }
+    } else {
+      log('❌ user_saved_data folder does not exist.');
+    }
   }
 
   @override
@@ -163,9 +194,10 @@ class _HomePageState extends State<HomePage> {
                             icon: Icon(Icons.save),
                             color: Colors.white,
                             tooltip: "Save",
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                _saveImage(image);
+                                await _saveImage(image);
+                                await listAllFoldersInAppDirectory();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     duration: Duration(seconds: 3),
