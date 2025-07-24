@@ -12,6 +12,7 @@ class SavedDataPage extends StatefulWidget {
 }
 
 class _SavedDataPageState extends State<SavedDataPage> {
+  //TODO: change from loading singluar file to loading list of files, use show search widget with listview builder
   File? loadedContent;
 
   @override
