@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
+import 'package:trash_classifier_app/utils/app_directory.dart';
 
 TextEditingController _nameController = TextEditingController();
 final _formKey = GlobalKey<FormState>();
@@ -33,17 +33,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _saveImage(XFile image) async {
-    final appDirectory = (await getApplicationDocumentsDirectory())
-        .path; //Gets app directory path
-    log(appDirectory);
+    final Directory appDirectory = await getAppDirectory(); //Gets app directory
 
-    final convertedImage = File(image.path); //sets image path to variable
+    final String appDirectoryPath = appDirectory.path;
+    log(appDirectoryPath);
+
+    final File convertedImage = File(image.path); //sets image path to variable
 
     final String fileName =
         "${_nameController.text}.jpg"; // adds.jpg to user specified filename
 
     final String filePath =
-        "$appDirectory/user_saved_data/${_nameController.text}";
+        "$appDirectoryPath/user_saved_data/${_nameController.text}";
 
     if (!await Directory(filePath).exists()) {
       await Directory(filePath).create(recursive: true);
@@ -56,10 +57,13 @@ class _HomePageState extends State<HomePage> {
     log("Image Saved as: ${_nameController.text} to $filePath/$fileName");
   }
 
+  //TODO: move and Use this function in the saved data page to pull all data that is saved
   Future<void> listAllFoldersInAppDirectory() async {
-    final Directory appDirectory = await getApplicationDocumentsDirectory();
+    final Directory appDirectory = await getAppDirectory();
+    final String appDirectoryPath = appDirectory.path;
+
     final Directory userSavedDataDir = Directory(
-      '${appDirectory.path}/user_saved_data',
+      '$appDirectoryPath/user_saved_data',
     );
 
     // Check if the directory exists
