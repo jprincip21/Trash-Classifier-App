@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:trash_classifier_app/data/constants.dart';
+import 'package:trash_classifier_app/data/notifiers.dart';
 import 'package:trash_classifier_app/utils/app_directory.dart';
 import 'package:trash_classifier_app/views/pages/selected_item_page.dart';
 
@@ -18,6 +19,7 @@ class SavedDataPage extends StatefulWidget {
 class _SavedDataPageState extends State<SavedDataPage> {
   //TODO: use show search widget to be able to search for certain entries
   //TODO: Probably use a value Notifier to update the page every time a new image is saved.
+  //TODO: Fix Issue with code that when a file is saved under an already existing name it wont refresh until the app is restarted.
 
   List<File> loadedFiles = [];
   List<Directory> loadedFolders = [];
@@ -26,6 +28,9 @@ class _SavedDataPageState extends State<SavedDataPage> {
   void initState() {
     super.initState();
     _loadContent();
+    newSavedDataNotifier.addListener(() async {
+      await _loadContent();
+    });
   }
 
   Future<void> _loadContent() async {

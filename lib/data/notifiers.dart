@@ -12,3 +12,7 @@ ValueNotifier<bool> darkModeNotifier = ValueNotifier(
 ValueNotifier<XFile?> imageCapturedNotifier = ValueNotifier<XFile?>(
   null,
 ); //Tells us if there is an image captured or not
+
+ValueNotifier<bool> newSavedDataNotifier = ValueNotifier(
+  false,
+); //Tells us when a new image is saved.
