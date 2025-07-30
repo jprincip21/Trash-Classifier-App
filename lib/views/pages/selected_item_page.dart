@@ -19,8 +19,6 @@ class _SelectedItemPageState extends State<SelectedItemPage> {
   @override
   void initState() {
     super.initState();
-    imageCache
-        .clear(); //This works but clears all loaded images. should be changed.
     _loadContent();
   }
 
