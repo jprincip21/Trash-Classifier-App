@@ -28,6 +28,7 @@ class _SavedDataPageState extends State<SavedDataPage> {
     super.initState();
     _loadContent();
     newSavedDataNotifier.addListener(() {
+      //Refreshes loaded folders to update the listtiles that are displayed.
       _loadContent();
     });
   }
