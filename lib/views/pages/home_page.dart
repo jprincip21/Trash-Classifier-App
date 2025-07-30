@@ -91,7 +91,6 @@ class _HomePageState extends State<HomePage> {
     // We do this by listening to a notifier which will update the state of the screen.
 
     //TODO: Update Page that displays if had not taken a picture yet.
-    //TODO: Add logic to save image to application directory to be accessed later
     //TODO: In settings add a button to clear data
     //TODO: In saved data add a way to delete the saved item
 
@@ -101,10 +100,7 @@ class _HomePageState extends State<HomePage> {
         _nameController.text = "";
         if (image == null) {
           return Center(
-            child: Text(
-              "No Image Found!",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
+            child: Text("No Image Found!", style: KTextStyle.descriptionStyle),
           );
         } else {
           return SingleChildScrollView(
