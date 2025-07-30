@@ -21,15 +21,14 @@ class _SavedDataPageState extends State<SavedDataPage> {
   //TODO: Probably use a value Notifier to update the page every time a new image is saved.
   //TODO: Fix Issue with code that when a file is saved under an already existing name it wont refresh until the app is restarted.
 
-  List<File> loadedFiles = [];
   List<Directory> loadedFolders = [];
 
   @override
   void initState() {
     super.initState();
     _loadContent();
-    newSavedDataNotifier.addListener(() async {
-      await _loadContent();
+    newSavedDataNotifier.addListener(() {
+      _loadContent();
     });
   }
 
@@ -49,10 +48,13 @@ class _SavedDataPageState extends State<SavedDataPage> {
     for (final entity in userSavedDataContents) {
       //Load Directory
       if (entity is Directory) {
-        log('📁 Folder: ${entity.path}');
+        log('Folder: ${entity.path}');
         allFolders.add(entity);
       }
     }
+    allFolders.sort((a, b) {
+      return a.path.toLowerCase().compareTo(b.path.toLowerCase());
+    });
     setState(() {
       loadedFolders = allFolders;
     });
