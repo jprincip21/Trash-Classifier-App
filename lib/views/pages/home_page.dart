@@ -197,6 +197,8 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 await _saveImage(image);
+                                newSavedDataNotifier.value =
+                                    !newSavedDataNotifier.value;
                                 await listAllFoldersInAppDirectory();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
