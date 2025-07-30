@@ -19,6 +19,8 @@ class _SelectedItemPageState extends State<SelectedItemPage> {
   @override
   void initState() {
     super.initState();
+    imageCache
+        .clear(); //This works but clears all loaded images. should be changed.
     _loadContent();
   }
 
@@ -41,7 +43,14 @@ class _SelectedItemPageState extends State<SelectedItemPage> {
     String itemName = basename(widget.directory.path);
 
     return Scaffold(
-      appBar: AppBar(title: Text(itemName)),
+      appBar: AppBar(
+        title: Text(itemName),
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: image != null
           ? Column(
               children: [
