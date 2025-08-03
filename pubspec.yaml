@@ -67,7 +67,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icon/
-    - assets/trash-classifier-model-v0_1.tflite
+    - assets/trash-classifier-model-v0_2.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
