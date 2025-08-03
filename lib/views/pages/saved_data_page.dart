@@ -42,6 +42,10 @@ class _SavedDataPageState extends State<SavedDataPage> {
       "$appDirectoryPath/user_saved_data",
     );
 
+    if (!await userSavedDataDir.exists()) {
+      await userSavedDataDir.create(recursive: true);
+    }
+
     final List<FileSystemEntity> userSavedDataContents = await userSavedDataDir
         .list()
         .toList();
