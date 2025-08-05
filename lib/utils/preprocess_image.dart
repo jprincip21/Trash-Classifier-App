@@ -28,9 +28,9 @@ Future<List<List<List<List<double>>>>> preProcessImage(File imagePath) async {
       img.Pixel pixel = resizedImage.getPixel(x, y);
 
       // Normalize RGB values from 0-255 to 0-1
-      double r = pixel.r / 255.0;
-      double g = pixel.g / 255.0;
-      double b = pixel.b / 255.0;
+      double r = pixel.r.toDouble();
+      double g = pixel.g.toDouble();
+      double b = pixel.b.toDouble();
 
       imageAsFloatList[y][x][0] = r;
       imageAsFloatList[y][x][1] = g;
