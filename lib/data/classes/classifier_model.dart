@@ -40,11 +40,27 @@ class ClassifierModel {
     }
   }
 
-  void runModel(File imagePath) async {
+  void runModel(String imagePath) async {
+    File image = File(imagePath);
     List output = List.filled(1 * 6, 0.0).reshape([1, 6]);
-    List<double> input = await preProcessImage(imagePath);
-    _interpreter.run(input, output);
+    var input = await preProcessImage(image);
 
-    //Process the output either in another function or within the runmodel function
+    log("Running Model");
+    _interpreter.run(input, output);
+    print(input);
+    print("\n");
+    print(output);
+
+    int maxIndex = 0;
+    for (int i = 1; i < output[0].length; i++) {
+      if (output[0][maxIndex] < output[0][i]) {
+        maxIndex = i;
+      }
+    }
+    log("Prediction: ${_labels[maxIndex]}");
+    log("Model output: ${output[0]}");
+    final List<double> resultList = List<double>.from(output[0]);
+    double maxVal = resultList.reduce((a, b) => a > b ? a : b);
+    log("Confidence: ${(maxVal * 100).toStringAsFixed(2)}%");
   }
 }
