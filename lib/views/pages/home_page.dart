@@ -66,33 +66,6 @@ class _HomePageState extends State<HomePage> {
     log("Image Saved as: ${_nameController.text} to $filePath/$fileName");
   }
 
-  //TODO: move and Use this function in the saved data page to pull all data that is saved
-  Future<void> listAllFoldersInAppDirectory() async {
-    final Directory appDirectory = await getAppDirectory();
-    final String appDirectoryPath = appDirectory.path;
-
-    final Directory userSavedDataDir = Directory(
-      '$appDirectoryPath/user_saved_data',
-    );
-
-    // Check if the directory exists
-    if (await userSavedDataDir.exists()) {
-      final List<FileSystemEntity> entities = await userSavedDataDir
-          .list()
-          .toList();
-
-      for (final entity in entities) {
-        if (entity is File) {
-          log('📄 File: ${entity.path}');
-        } else if (entity is Directory) {
-          log('📁 Folder: ${entity.path}');
-        }
-      }
-    } else {
-      log('❌ user_saved_data folder does not exist.');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // If an image has not been taken we display a default page that will direct the use to take or pick an image
@@ -112,6 +85,7 @@ class _HomePageState extends State<HomePage> {
             child: Text("No Image Found!", style: KTextStyle.descriptionStyle),
           );
         } else {
+          //! Move run Model to somewhere else.
           model.runModel(image.path);
           return SingleChildScrollView(
             child: Form(
@@ -209,7 +183,6 @@ class _HomePageState extends State<HomePage> {
                                 await _saveImage(image);
                                 newSavedDataNotifier.value =
                                     !newSavedDataNotifier.value;
-                                await listAllFoldersInAppDirectory();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     duration: Duration(seconds: 3),
