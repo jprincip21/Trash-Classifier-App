@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:trash_classifier_app/data/classes/classifier_model.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
 import 'package:trash_classifier_app/utils/app_directory.dart';
@@ -19,6 +20,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late ClassifierModel model;
+  @override
+  void initState() {
+    super.initState();
+    model = ClassifierModel();
+    model.loadModel();
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -103,6 +112,7 @@ class _HomePageState extends State<HomePage> {
             child: Text("No Image Found!", style: KTextStyle.descriptionStyle),
           );
         } else {
+          model.runModel(image.path);
           return SingleChildScrollView(
             child: Form(
               key: _formKey,
