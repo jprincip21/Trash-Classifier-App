@@ -47,11 +47,13 @@ class _HomePageState extends State<HomePage> {
   void _deleteImage() {
     if (imageCapturedNotifier.value != null) {
       imageCapturedNotifier.value = null;
+      _nameController.text = "";
+      prediction = null;
       log("Image Deleted");
     }
   }
 
-  Future<void> _saveImage(XFile image) async {
+  Future<void> _saveImage(XFile image, String? prediction) async {
     final Directory appDirectory = await getAppDirectory(); //Gets app directory
 
     final String appDirectoryPath = appDirectory.path;
@@ -74,6 +76,17 @@ class _HomePageState extends State<HomePage> {
     ); // copys the selected image to application directory
 
     log("Image Saved as: ${_nameController.text} to $filePath/$fileName");
+
+    final File classificationFile = File("$filePath/classification.txt");
+
+    if (prediction != null) {
+      try {
+        await classificationFile.writeAsString(prediction);
+        log("Prediction: $prediction Saved to $filePath/classification.txt");
+      } catch (e) {
+        log('Error saving file: $e');
+      }
+    }
   }
 
   @override
@@ -195,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                             tooltip: "Save",
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                await _saveImage(image);
+                                await _saveImage(image, prediction);
                                 newSavedDataNotifier.value =
                                     !newSavedDataNotifier.value;
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -206,9 +219,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 );
-                                _nameController.text = "";
-                                prediction = null;
-                                imageCapturedNotifier.value = null;
+                                _deleteImage();
                               }
                             },
                           ),
