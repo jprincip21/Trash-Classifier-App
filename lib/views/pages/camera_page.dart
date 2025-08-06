@@ -156,8 +156,10 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     ///Builds the Camera Page when Called
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         leading: BackButton(
+          color: Colors.white,
           onPressed: () {
             log("Camera Page Close");
             Navigator.pop(context);
@@ -171,7 +173,7 @@ class _CameraPageState extends State<CameraPage> {
                 _changeFlash();
               });
             },
-            icon: Icon(_flashIcons[_flashSetting]),
+            icon: Icon(_flashIcons[_flashSetting], color: Colors.white),
           ),
 
           IconButton(
@@ -180,7 +182,7 @@ class _CameraPageState extends State<CameraPage> {
               setState(() {});
               log("Camera Flip Pressed");
             },
-            icon: Icon(Icons.flip_camera_ios_outlined),
+            icon: Icon(Icons.flip_camera_ios_outlined, color: Colors.white),
           ),
         ],
         backgroundColor: Colors.transparent,
@@ -203,7 +205,11 @@ class _CameraPageState extends State<CameraPage> {
                             onPressed: () async {
                               pickImage();
                             },
-                            icon: Icon(Icons.photo_outlined, size: 40),
+                            icon: Icon(
+                              Icons.photo_outlined,
+                              size: 40,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         Expanded(
