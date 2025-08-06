@@ -21,11 +21,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late ClassifierModel model;
+  String? prediction;
+
   @override
   void initState() {
     super.initState();
     model = ClassifierModel();
     model.loadModel();
+
+    imageCapturedNotifier.addListener(() async {
+      final image = imageCapturedNotifier.value;
+      if (image != null) {
+        prediction = await model.runModel(image.path);
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -79,14 +89,11 @@ class _HomePageState extends State<HomePage> {
     return ValueListenableBuilder(
       valueListenable: imageCapturedNotifier,
       builder: (context, image, child) {
-        _nameController.text = "";
         if (image == null) {
           return Center(
             child: Text("No Image Found!", style: KTextStyle.descriptionStyle),
           );
         } else {
-          //! Move run Model to somewhere else.
-          model.runModel(image.path);
           return SingleChildScrollView(
             child: Form(
               key: _formKey,
@@ -97,6 +104,7 @@ class _HomePageState extends State<HomePage> {
                     width: double.infinity,
                     child: Image.file(File(image.path)),
                   ),
+
                   Container(
                     padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                     width: double.infinity,
@@ -106,12 +114,19 @@ class _HomePageState extends State<HomePage> {
                           "Type: ",
                           style: KTextStyle.descriptionStyle,
                         ),
-                        title: Text("Loading..."),
-                        trailing: SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: CircularProgressIndicator(),
-                        ),
+
+                        title: prediction == null
+                            ? Align(
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                  ),
+                                ),
+                              )
+                            : Text(prediction!),
                       ),
                     ),
                   ),
@@ -191,6 +206,9 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 );
+                                _nameController.text = "";
+                                prediction = null;
+                                imageCapturedNotifier.value = null;
                               }
                             },
                           ),
