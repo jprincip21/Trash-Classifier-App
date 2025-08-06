@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> {
 
     //TODO: Update Page that displays if had not taken a picture yet.
     //TODO: In settings add a button to clear data
-    //TODO: In saved data add a way to delete the saved item
 
     return ValueListenableBuilder(
       valueListenable: imageCapturedNotifier,
