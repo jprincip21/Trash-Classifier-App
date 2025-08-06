@@ -10,4 +10,5 @@ class KTextStyle {
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
   );
+  static const TextStyle labelStyle = TextStyle(fontSize: 14);
 }
