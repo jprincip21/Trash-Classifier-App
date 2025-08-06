@@ -18,8 +18,7 @@ class SavedDataPage extends StatefulWidget {
 
 class _SavedDataPageState extends State<SavedDataPage> {
   //TODO: use show search widget to be able to search for certain entries
-  //TODO: Probably use a value Notifier to update the page every time a new image is saved.
-  //TODO: Fix Issue with code that when a file is saved under an already existing name it wont refresh until the app is restarted.
+  //TODO: Use Slider for deleting entries.
 
   List<Directory> loadedFolders = [];
 
@@ -84,7 +83,7 @@ class _SavedDataPageState extends State<SavedDataPage> {
                   horizontal: 8.0,
                 ),
 
-                title: Text(folderName),
+                title: Text(folderName, style: KTextStyle.labelStyle),
                 onTap: () {
                   Navigator.push(
                     context,
