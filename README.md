@@ -1,6 +1,6 @@
 # ♻️Trash Classifier Application
 
-A mobile application built with Flutter that helps users identify and categorize waste using a machine learning model. Snap a photo of any item, and the app will tell you whether it belongs in **Recycling**, **Compost**, **Garbage**, or another category — helping users make eco-friendly decisions.
+A mobile application built with Flutter that helps users identify and categorize waste using a machine learning model. Snap a photo of any item, and the app will tell you whether it belongs in **Recycling**, **Compost**, **Garbage**, or another category - helping users make eco-friendly decisions.
 
 ## 📱 Features
 
