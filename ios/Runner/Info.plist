@@ -4,9 +4,12 @@
 <dict>
 	<!-- Camara Useage-->
 	<key>NSCameraUsageDescription</key>
-	<string>your usage description here</string>
+	<string>Trash Classifier wants to access your camera</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>your usage description here</string>
+	<string>Trash Classifier wants to access your microphone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Trash Classifier wants to access your photo library</string>
+
 	
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

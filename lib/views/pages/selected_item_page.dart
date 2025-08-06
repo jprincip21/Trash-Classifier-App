@@ -14,7 +14,9 @@ class SelectedItemPage extends StatefulWidget {
 }
 
 class _SelectedItemPageState extends State<SelectedItemPage> {
-  late File? image = null;
+  File? image;
+  File? classificationFile;
+  String? prediction;
 
   @override
   void initState() {
@@ -30,8 +32,17 @@ class _SelectedItemPageState extends State<SelectedItemPage> {
     for (final file in folder) {
       if (file is File) {
         log("File: ${file.path}");
-        image = file;
+        if (file.path.endsWith(".txt")) {
+          classificationFile = file;
+        } else {
+          image = file;
+        }
       }
+    }
+    if (classificationFile != null) {
+      prediction = await classificationFile!.readAsString();
+    } else {
+      log("No Classification data found");
     }
     setState(() {});
   }
@@ -68,7 +79,9 @@ class _SelectedItemPageState extends State<SelectedItemPage> {
                 SizedBox(
                   height: 500,
                   width: double.infinity,
-                  child: Image.file(image!),
+                  child: image != null
+                      ? Image.file(image!)
+                      : CircularProgressIndicator(strokeWidth: 2.5),
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -79,12 +92,9 @@ class _SelectedItemPageState extends State<SelectedItemPage> {
                         "Type: ",
                         style: KTextStyle.descriptionStyle,
                       ),
-                      title: Text("Loading..."),
-                      trailing: SizedBox(
-                        width: 25,
-                        height: 25,
-                        child: CircularProgressIndicator(),
-                      ),
+                      title: prediction == null
+                          ? Text("No Classification Data Found")
+                          : Text(prediction!),
                     ),
                   ),
                 ),

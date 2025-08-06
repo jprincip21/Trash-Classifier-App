@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:trash_classifier_app/data/classes/classifier_model.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
 import 'package:trash_classifier_app/utils/app_directory.dart';
@@ -19,6 +20,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late ClassifierModel model;
+  String? prediction;
+
+  @override
+  void initState() {
+    super.initState();
+    model = ClassifierModel();
+    model.loadModel();
+
+    imageCapturedNotifier.addListener(() async {
+      final image = imageCapturedNotifier.value;
+      if (image != null) {
+        prediction = await model.runModel(image.path);
+        setState(() {});
+      }
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -28,11 +47,13 @@ class _HomePageState extends State<HomePage> {
   void _deleteImage() {
     if (imageCapturedNotifier.value != null) {
       imageCapturedNotifier.value = null;
+      _nameController.text = "";
+      prediction = null;
       log("Image Deleted");
     }
   }
 
-  Future<void> _saveImage(XFile image) async {
+  Future<void> _saveImage(XFile image, String? prediction) async {
     final Directory appDirectory = await getAppDirectory(); //Gets app directory
 
     final String appDirectoryPath = appDirectory.path;
@@ -55,32 +76,16 @@ class _HomePageState extends State<HomePage> {
     ); // copys the selected image to application directory
 
     log("Image Saved as: ${_nameController.text} to $filePath/$fileName");
-  }
 
-  //TODO: move and Use this function in the saved data page to pull all data that is saved
-  Future<void> listAllFoldersInAppDirectory() async {
-    final Directory appDirectory = await getAppDirectory();
-    final String appDirectoryPath = appDirectory.path;
+    final File classificationFile = File("$filePath/classification.txt");
 
-    final Directory userSavedDataDir = Directory(
-      '$appDirectoryPath/user_saved_data',
-    );
-
-    // Check if the directory exists
-    if (await userSavedDataDir.exists()) {
-      final List<FileSystemEntity> entities = await userSavedDataDir
-          .list()
-          .toList();
-
-      for (final entity in entities) {
-        if (entity is File) {
-          log('📄 File: ${entity.path}');
-        } else if (entity is Directory) {
-          log('📁 Folder: ${entity.path}');
-        }
+    if (prediction != null) {
+      try {
+        await classificationFile.writeAsString(prediction);
+        log("Prediction: $prediction Saved to $filePath/classification.txt");
+      } catch (e) {
+        log('Error saving file: $e');
       }
-    } else {
-      log('❌ user_saved_data folder does not exist.');
     }
   }
 
@@ -97,7 +102,6 @@ class _HomePageState extends State<HomePage> {
     return ValueListenableBuilder(
       valueListenable: imageCapturedNotifier,
       builder: (context, image, child) {
-        _nameController.text = "";
         if (image == null) {
           return Center(
             child: Text("No Image Found!", style: KTextStyle.descriptionStyle),
@@ -113,6 +117,7 @@ class _HomePageState extends State<HomePage> {
                     width: double.infinity,
                     child: Image.file(File(image.path)),
                   ),
+
                   Container(
                     padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                     width: double.infinity,
@@ -122,12 +127,19 @@ class _HomePageState extends State<HomePage> {
                           "Type: ",
                           style: KTextStyle.descriptionStyle,
                         ),
-                        title: Text("Loading..."),
-                        trailing: SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: CircularProgressIndicator(),
-                        ),
+
+                        title: prediction == null
+                            ? Align(
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                  ),
+                                ),
+                              )
+                            : Text(prediction!),
                       ),
                     ),
                   ),
@@ -196,10 +208,9 @@ class _HomePageState extends State<HomePage> {
                             tooltip: "Save",
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                await _saveImage(image);
+                                await _saveImage(image, prediction);
                                 newSavedDataNotifier.value =
                                     !newSavedDataNotifier.value;
-                                await listAllFoldersInAppDirectory();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     duration: Duration(seconds: 3),
@@ -208,6 +219,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 );
+                                _deleteImage();
                               }
                             },
                           ),

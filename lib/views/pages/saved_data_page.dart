@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:path/path.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
@@ -18,8 +19,6 @@ class SavedDataPage extends StatefulWidget {
 
 class _SavedDataPageState extends State<SavedDataPage> {
   //TODO: use show search widget to be able to search for certain entries
-  //TODO: Probably use a value Notifier to update the page every time a new image is saved.
-  //TODO: Fix Issue with code that when a file is saved under an already existing name it wont refresh until the app is restarted.
 
   List<Directory> loadedFolders = [];
 
@@ -42,6 +41,10 @@ class _SavedDataPageState extends State<SavedDataPage> {
       "$appDirectoryPath/user_saved_data",
     );
 
+    if (!await userSavedDataDir.exists()) {
+      await userSavedDataDir.create(recursive: true);
+    }
+
     final List<FileSystemEntity> userSavedDataContents = await userSavedDataDir
         .list()
         .toList();
@@ -62,6 +65,20 @@ class _SavedDataPageState extends State<SavedDataPage> {
     });
   }
 
+  Future<void> _deleteFolder(Directory folder) async {
+    try {
+      if (await folder.exists()) {
+        await folder.delete(recursive: true);
+        log("Deleted Item: ${basename(folder.path)}");
+        setState(() {
+          loadedFolders.remove(folder);
+        });
+      }
+    } catch (e) {
+      log("Error deleting folder: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (loadedFolders.isNotEmpty) {
@@ -69,28 +86,49 @@ class _SavedDataPageState extends State<SavedDataPage> {
         padding: EdgeInsets.symmetric(horizontal: 8),
         itemCount: loadedFolders.length,
         itemBuilder: (context, index) {
-          final folder = loadedFolders[index];
-          final folderName = basename(folder.path);
+          final Directory folder = loadedFolders[index];
+          final String folderName = basename(folder.path);
           return Column(
             children: [
-              ListTile(
-                dense: true,
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 8.0,
-                ),
-
-                title: Text(folderName),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return (SelectedItemPage(directory: folder));
-                      },
+              Slidable(
+                closeOnScroll: true,
+                endActionPane: ActionPane(
+                  motion: StretchMotion(),
+                  children: [
+                    SlidableAction(
+                      backgroundColor: Colors.red,
+                      onPressed: ((context) {
+                        _deleteFolder(folder);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: Duration(seconds: 3),
+                            content: Text("Item Delete Successfully"),
+                          ),
+                        );
+                      }),
+                      icon: Icons.delete,
                     ),
-                  );
-                },
+                  ],
+                ),
+                child: ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 8.0,
+                  ),
+
+                  title: Text(folderName, style: KTextStyle.labelStyle),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return (SelectedItemPage(directory: folder));
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
               Divider(
                 height: 1,

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:trash_classifier_app/data/notifiers.dart';
 
 class CameraPage extends StatefulWidget {
@@ -18,6 +19,8 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
   late CameraDescription _backCamera;
   late CameraDescription _frontCamera;
+
+  final _picker = ImagePicker();
 
   bool _isCameraReady = false;
   bool _isBackCamera = true;
@@ -39,6 +42,18 @@ class _CameraPageState extends State<CameraPage> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> pickImage() async {
+    final XFile? pickedImage = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedImage != null) {
+      imageCapturedNotifier.value = pickedImage;
+      setState(() {});
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _initializeCameras() async {
@@ -141,8 +156,10 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     ///Builds the Camera Page when Called
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         leading: BackButton(
+          color: Colors.white,
           onPressed: () {
             log("Camera Page Close");
             Navigator.pop(context);
@@ -156,7 +173,7 @@ class _CameraPageState extends State<CameraPage> {
                 _changeFlash();
               });
             },
-            icon: Icon(_flashIcons[_flashSetting]),
+            icon: Icon(_flashIcons[_flashSetting], color: Colors.white),
           ),
 
           IconButton(
@@ -165,7 +182,7 @@ class _CameraPageState extends State<CameraPage> {
               setState(() {});
               log("Camera Flip Pressed");
             },
-            icon: Icon(Icons.flip_camera_ios_outlined),
+            icon: Icon(Icons.flip_camera_ios_outlined, color: Colors.white),
           ),
         ],
         backgroundColor: Colors.transparent,
@@ -174,28 +191,49 @@ class _CameraPageState extends State<CameraPage> {
       //If the camera is ready we will display the camera preview, otherwise we will display a loading icon.
       body: _isCameraReady
           ? SizedBox.expand(
-              child: Stack(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Positioned.fill(child: CameraPreview(_controller)),
+                  CameraPreview(_controller),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: GestureDetector(
-                        onTap: () async {
-                          XFile image = await _controller.takePicture();
-                          if (!mounted) return;
-                          log("Capture Button Pressed");
-                          log('Picture saved at: ${image.path}');
-                          imageCapturedNotifier.value = image;
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.circle_outlined,
-                          size: 100.0,
-                          color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: IconButton(
+                            onPressed: () async {
+                              pickImage();
+                            },
+                            icon: Icon(
+                              Icons.photo_outlined,
+                              size: 40,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: GestureDetector(
+                              onTap: () async {
+                                XFile image = await _controller.takePicture();
+                                if (!mounted) return;
+                                log("Capture Button Pressed");
+                                log('Picture saved at: ${image.path}');
+                                imageCapturedNotifier.value = image;
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.circle_outlined,
+                                size: 100.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(child: SizedBox()),
+                      ],
                     ),
                   ),
                 ],
