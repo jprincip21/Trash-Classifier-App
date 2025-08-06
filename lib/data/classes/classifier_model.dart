@@ -16,12 +16,12 @@ class ClassifierModel {
   static const String modelPath = "assets/trash-classifier-model-v0_2.tflite";
 
   final List<String> _labels = [
-    "compost",
-    "garbage",
-    "glass",
-    "hazardous-waste",
-    "recycling-paper",
-    "recycling-plastic",
+    "Compost",
+    "Garbage",
+    "Glass",
+    "Hazardous Waste",
+    "Recycling (Paper)",
+    "Recycling (Plastic)",
   ];
 
   Future<void> loadModel() async {
@@ -40,7 +40,7 @@ class ClassifierModel {
     }
   }
 
-  void runModel(String imagePath) async {
+  Future<String> runModel(String imagePath) async {
     File image = File(imagePath);
     List output = List.filled(1 * 6, 0.0).reshape([1, 6]);
     var input = await preProcessImage(image);
@@ -57,10 +57,14 @@ class ClassifierModel {
         maxIndex = i;
       }
     }
-    log("Prediction: ${_labels[maxIndex]}");
+
     log("Model output: ${output[0]}");
+    log("Model Prediction: ${_labels[maxIndex]}");
+
     final List<double> resultList = List<double>.from(output[0]);
     double maxVal = resultList.reduce((a, b) => a > b ? a : b);
-    log("Confidence: ${(maxVal * 100).toStringAsFixed(2)}%");
+    log("Model Confidence: ${(maxVal * 100).toStringAsFixed(2)}%");
+
+    return _labels[maxIndex];
   }
 }
