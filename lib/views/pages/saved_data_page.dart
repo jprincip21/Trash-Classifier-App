@@ -19,7 +19,6 @@ class SavedDataPage extends StatefulWidget {
 
 class _SavedDataPageState extends State<SavedDataPage> {
   //TODO: use show search widget to be able to search for certain entries
-  //TODO: Use Slidable for deleting entries.
 
   List<Directory> loadedFolders = [];
 
