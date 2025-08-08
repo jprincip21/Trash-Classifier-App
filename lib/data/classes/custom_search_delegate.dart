@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchTerms = ["a", "b", "c", "d"];
+  List<String> searchTerms = ["a", "b", "c"];
 
   @override
   List<Widget> buildActions(BuildContext context) {
