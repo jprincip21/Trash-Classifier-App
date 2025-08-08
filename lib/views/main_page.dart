@@ -5,6 +5,7 @@ import 'package:trash_classifier_app/views/pages/saved_data_page.dart';
 import 'package:trash_classifier_app/views/pages/settings_page.dart';
 import 'package:trash_classifier_app/views/widgets/camera_button_widget.dart';
 import 'package:trash_classifier_app/views/widgets/navbar_widget.dart';
+import 'package:trash_classifier_app/views/widgets/search_bar_widget.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -26,15 +27,19 @@ class _MainPageState extends State<MainPage> {
           appBar: AppBar(
             title: Text("Trash Classifier"),
             actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SettingsPage()),
-                  );
-                },
-                icon: Icon(Icons.settings),
-              ),
+              selectedPage == 0
+                  ? IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SettingsPage(),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.settings),
+                    )
+                  : SearchBarWidget(),
             ],
           ),
           body: IndexedStack(index: selectedPage, children: _pages),
