@@ -42,7 +42,7 @@ Future<List<Directory>> loadFolders() async {
 }
 
 Future<void> deleteSelectedFolder(Directory folder) async {
-  /// Deletes a folder from the application document directory
+  /// Deletes a selected folder from the application document directory
   try {
     if (await folder.exists()) {
       await folder.delete(recursive: true);
