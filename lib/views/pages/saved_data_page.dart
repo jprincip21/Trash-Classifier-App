@@ -9,7 +9,7 @@ import 'package:trash_classifier_app/utils/app_directory.dart';
 import 'package:trash_classifier_app/views/pages/selected_item_page.dart';
 
 class SavedDataPage extends StatefulWidget {
-  /// Holds user saved data
+  /// Displays user saved data
   const SavedDataPage({super.key});
 
   @override
@@ -17,8 +17,6 @@ class SavedDataPage extends StatefulWidget {
 }
 
 class _SavedDataPageState extends State<SavedDataPage> {
-  //TODO: use show search widget to be able to search for certain entries
-
   List<Directory> loadedFolders = [];
 
   @override
