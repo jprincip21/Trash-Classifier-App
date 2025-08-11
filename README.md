@@ -39,6 +39,8 @@ A mobile application built with Flutter that helps users identify and categorize
   <img src="media/Dark Mode.gif" alt="Capture Feature" width="180" />
 </p>
 
-
-
+## 📬 Contact
+**Jonathan Principato**
+- Email: [jonathan.principato@gmail.com](mailto:jonathan.principato@gmail.com)
+- GitHub: [@jprincip21](https://github.com/jprincip21)
 
