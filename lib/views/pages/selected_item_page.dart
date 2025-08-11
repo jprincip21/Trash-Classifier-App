@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:trash_classifier_app/data/constants.dart';
 
 class SelectedItemPage extends StatefulWidget {
+  // Displays the item the user selected from the app directory
   final Directory directory;
   const SelectedItemPage({super.key, required this.directory});
 
